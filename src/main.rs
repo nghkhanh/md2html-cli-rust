@@ -28,8 +28,24 @@ fn generate_html_document(body_content: &str) -> String {
     )
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let args = CliArgs::parse();
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct CliArgs {
+
+    ///Input path
+    input_path: PathBuf,
+
+    ///Output path
+    output_path: PathBuf,
+
+    /// Enables watch mode
+    #[arg(short, long)]
+    watch: bool,
+}
+
+
+fn md2html(args: &CliArgs) -> Result<(), Box<dyn Error>> {
 
     let md_content = fs::read_to_string(&args.input_path)?;
 
@@ -45,13 +61,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 
-// fn parse_md(content: &str) -> String {
-//     content.to_string()
-// }
+fn main() -> Result<(), Box<dyn Error>> {
+    let args = CliArgs::parse();
 
+    md2html(&args)?;
 
-#[derive(Parser, Debug)]
-struct CliArgs {
-    input_path: PathBuf,
-    output_path: PathBuf,
+    Ok(())
 }
