@@ -6,18 +6,24 @@ mod parser;
 
 
 fn generate_html_document(body_content: &str) -> String {
+    const CSS_STYLE: &str = include_str!("../style.css");
+
     format!(
         r#"<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Converted Document</title>
+    <style>
+{}
+    </style>
 </head>
 <body>
 {}
 </body>
 </html>
-"#, 
+"#,
+        CSS_STYLE, 
         body_content
     )
 }
