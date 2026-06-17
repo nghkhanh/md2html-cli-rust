@@ -5,6 +5,23 @@ use std::error::Error;
 mod parser;
 
 
+fn generate_html_document(body_content: &str) -> String {
+    format!(
+        r#"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Converted Document</title>
+</head>
+<body>
+{}
+</body>
+</html>
+"#, 
+        body_content
+    )
+}
+
 fn main() -> Result<(), Box<dyn Error>> {
     let args = CliArgs::parse();
 
@@ -12,7 +29,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let html_output = parser::parse(&md_content);
 
-    fs::write(&args.output_path, html_output)?;
+    let final_output = generate_html_document(&html_output);
+
+    fs::write(&args.output_path, final_output)?;
 
     println!("Successfully converted {:?} to {:?}.", args.input_path, args.output_path);
 
